@@ -17,4 +17,6 @@ internal abstract class Node
             Position = lineInfo.LinePosition;
         }
     }
+
+    public abstract void AcceptVisitor(INodeVisitor visitor);
 }

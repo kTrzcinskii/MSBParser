@@ -15,4 +15,9 @@ internal class TargetNode : Node
         ItemGroups = itemGroups;
         OnErrors = onErrors;
     }
+
+    public override void AcceptVisitor(INodeVisitor visitor)
+    {
+        visitor.VisitTargetNode(this);
+    }
 }

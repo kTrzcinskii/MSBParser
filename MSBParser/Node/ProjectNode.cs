@@ -13,4 +13,9 @@ internal class ProjectNode : Node
         ItemGroups = itemGroups;
         Targets = targets;
     }
+
+    public override void AcceptVisitor(INodeVisitor visitor)
+    {
+        visitor.VisitProjectNode(this);
+    }
 }

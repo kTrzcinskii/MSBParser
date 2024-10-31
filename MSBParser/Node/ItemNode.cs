@@ -9,4 +9,9 @@ internal class ItemNode : Node
     {
         ItemMetadatas = itemMetadatas;
     }
+
+    public override void AcceptVisitor(INodeVisitor visitor)
+    {
+        visitor.VisitItemNode(this);
+    }
 }

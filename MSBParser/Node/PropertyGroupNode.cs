@@ -9,4 +9,9 @@ internal class PropertyGroupNode : Node
     {
         Properties = properties;
     }
+
+    public override void AcceptVisitor(INodeVisitor visitor)
+    {
+        visitor.VisitPropertyGroupNode(this);
+    }
 }

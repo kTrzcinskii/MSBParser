@@ -9,4 +9,9 @@ internal class ItemGroupNode : Node
     {
         Items = items;
     }
+
+    public override void AcceptVisitor(INodeVisitor visitor)
+    {
+        visitor.VisitItemGroupNode(this);
+    }
 }

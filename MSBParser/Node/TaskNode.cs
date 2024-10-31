@@ -9,4 +9,9 @@ internal class TaskNode : Node
     {
         Outputs = outputs;
     }
+
+    public override void AcceptVisitor(INodeVisitor visitor)
+    {
+        visitor.VisitTaskNode(this);
+    }
 }
