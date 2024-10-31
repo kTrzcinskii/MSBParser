@@ -1,0 +1,24 @@
+﻿<Window x:Class="MSBParser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MSBParser"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Menu VerticalAlignment="Top" Height="30">
+            <MenuItem Header="File">
+                <MenuItem Header="Open .csproj" Click="OpenCsprojFile_Click"/>
+            </MenuItem>
+        </Menu>
+        <TextBox Name="EditorTextBox" 
+                 VerticalScrollBarVisibility="Auto" 
+                 HorizontalScrollBarVisibility="Auto" 
+                 Margin="0,30,0,0" 
+                 AcceptsReturn="True" 
+                 AcceptsTab="True" 
+                 FontFamily="Consolas" 
+                 FontSize="14"/>
+    </Grid>
+</Window>
