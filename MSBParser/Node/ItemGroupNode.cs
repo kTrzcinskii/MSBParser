@@ -3,7 +3,10 @@
 namespace MSBParser.Node;
 internal class ItemGroupNode : Node
 {
-    public ItemGroupNode(XElement sourceXml) : base(sourceXml)
+    public List<ItemNode> Items { get; }
+    
+    public ItemGroupNode(XElement sourceXml, List<ItemNode> items) : base(sourceXml)
     {
+        Items = items;
     }
 }

@@ -3,7 +3,10 @@
 namespace MSBParser.Node;
 internal class PropertyGroupNode : Node
 {
-    public PropertyGroupNode(XElement sourceXml) : base(sourceXml)
+    public List<PropertyNode> Properties { get; }
+    
+    public PropertyGroupNode(XElement sourceXml, List<PropertyNode> properties) : base(sourceXml)
     {
+        Properties = properties;
     }
 }

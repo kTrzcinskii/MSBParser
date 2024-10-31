@@ -3,7 +3,16 @@
 namespace MSBParser.Node;
 internal class TargetNode : Node
 {
-    public TargetNode(XElement sourceXml) : base(sourceXml)
+    public List<TaskNode> Tasks { get; }
+    public List<PropertyGroupNode> PropertyGroups { get; }
+    public List<ItemGroupNode> ItemGroups { get; }
+    public List<OnErrorNode> OnErrors { get; }
+    
+    public TargetNode(XElement sourceXml, List<TaskNode> tasks, List<PropertyGroupNode> propertyGroups, List<ItemGroupNode> itemGroups, List<OnErrorNode> onErrors) : base(sourceXml)
     {
+        Tasks = tasks;
+        PropertyGroups = propertyGroups;
+        ItemGroups = itemGroups;
+        OnErrors = onErrors;
     }
 }

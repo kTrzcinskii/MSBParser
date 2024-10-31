@@ -3,7 +3,10 @@
 namespace MSBParser.Node;
 internal class TaskNode : Node
 {
-    public TaskNode(XElement sourceXml) : base(sourceXml)
+    public List<OutputNode> Outputs { get; }
+    
+    public TaskNode(XElement sourceXml, List<OutputNode> outputs) : base(sourceXml)
     {
+        Outputs = outputs;
     }
 }
