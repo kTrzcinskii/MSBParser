@@ -12,7 +12,7 @@
                 <MenuItem Header="Open .csproj" Click="OpenCsprojFile_Click"/>
             </MenuItem>
         </Menu>
-        <TextBox Name="EditorTextBox" 
+        <RichTextBox Name="EditorRichTextBox" 
                  VerticalScrollBarVisibility="Auto" 
                  HorizontalScrollBarVisibility="Auto" 
                  Margin="0,30,0,0" 

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System.IO;
 using System.Windows;
+using System.Windows.Documents;
+using System.Xml.Linq;
 
 namespace MSBParser;
 /// <summary>
@@ -22,12 +24,12 @@ public partial class MainWindow : Window
 
         if (openFileDialog.ShowDialog() == true)
         {
-            string fileContent = File.ReadAllText(openFileDialog.FileName);
-
+            string fileContent = File.ReadAllText(openFileDialog.FileName).Trim();
+            EditorRichTextBox.Document.Blocks.Add(new Paragraph(new Run(fileContent)));
             var parser = new Parser(openFileDialog.FileName);
             var project = parser.Parse();
-
-            EditorTextBox.Text = fileContent;
+            var syntaxHighlighter = new SyntaxHighlighter(EditorRichTextBox);
+            syntaxHighlighter.HighlightContent(project);
         }
     }
 }
