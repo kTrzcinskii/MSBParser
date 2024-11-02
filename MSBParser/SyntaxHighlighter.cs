@@ -142,33 +142,37 @@ internal class SyntaxHighlighter : INodeVisitor
     
     public void VisitItemGroupNode(ItemGroupNode itemGroupNode)
     {
-        throw new NotImplementedException();
+        HighlightNode(itemGroupNode);
+        HighlightList(itemGroupNode.Items.Cast<Node>().ToList());
     }
 
     public void VisitItemMetadataNode(ItemMetadataNode itemMetadataNode)
     {
-        throw new NotImplementedException();
+        HighlightNode(itemMetadataNode);
     }
 
     public void VisitItemNode(ItemNode itemNode)
     {
-        throw new NotImplementedException();
+        HighlightNode(itemNode);
+        HighlightList(itemNode.ItemMetadatas.Cast<Node>().ToList());
     }
 
     public void VisitOnErrorNode(OnErrorNode onErrorNode)
     {
-        throw new NotImplementedException();
+        HighlightNode(onErrorNode);
     }
 
     public void VisitOutputNode(OutputNode outputNode)
     {
-        throw new NotImplementedException();
+        HighlightNode(outputNode);
     }
 
     public void VisitProjectNode(ProjectNode projectNode)
     {
         HighlightNode(projectNode);
         HighlightList(projectNode.PropertyGroups.Cast<Node>().ToList());
+        HighlightList(projectNode.ItemGroups.Cast<Node>().ToList());
+        HighlightList(projectNode.Targets.Cast<Node>().ToList());
     }
 
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode)
@@ -184,11 +188,16 @@ internal class SyntaxHighlighter : INodeVisitor
 
     public void VisitTargetNode(TargetNode targetNode)
     {
-        throw new NotImplementedException();
+        HighlightNode(targetNode);
+        HighlightList(targetNode.Tasks.Cast<Node>().ToList());
+        HighlightList(targetNode.PropertyGroups.Cast<Node>().ToList());
+        HighlightList(targetNode.ItemGroups.Cast<Node>().ToList());
+        HighlightList(targetNode.OnErrors.Cast<Node>().ToList());
     }
 
     public void VisitTaskNode(TaskNode taskNode)
     {
-        throw new NotImplementedException();
+        HighlightNode(taskNode);
+        HighlightList(taskNode.Outputs.Cast<Node>().ToList());
     }
 }
