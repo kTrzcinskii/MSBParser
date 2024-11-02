@@ -2,6 +2,8 @@
 
 internal interface INodeVisitor
 {
+    public void VisitImportGroupNode(ImportGroupNode importGroupNode);
+    public void VisitImportNode(ImportNode importNode);
     public void VisitItemGroupNode(ItemGroupNode itemGroupNode);
     public void VisitItemMetadataNode(ItemMetadataNode itemMetadataNode);
     public void VisitItemNode(ItemNode itemNode);

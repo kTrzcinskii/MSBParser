@@ -23,6 +23,27 @@ internal class Parser
         return _content.Root is { Name.LocalName: TagNames.Project } ? ParseProject(_content.Root) : null;
     }
 
+    private ImportGroupNode ParseImportGroup(XElement importGroupElement)
+    {
+        var imports = new List<ImportNode>();
+        foreach (var element in importGroupElement.Elements())
+        {
+            switch (element.Name.LocalName)
+            {
+                case TagNames.Import:
+                    var import = ParseImport(element);
+                    imports.Add(import);
+                    break;
+            }
+        }
+        return new ImportGroupNode(importGroupElement, imports);
+    }
+
+    private ImportNode ParseImport(XElement importElement)
+    {
+        return new ImportNode(importElement);
+    }
+
     private ItemGroupNode ParseItemGroup(XElement itemGroupElement)
     {
         var items = itemGroupElement.Elements().Select(ParseItem).ToList();
@@ -55,6 +76,8 @@ internal class Parser
         var propertyGroups = new List<PropertyGroupNode>();
         var itemGroups = new List<ItemGroupNode>();
         var targets = new List<TargetNode>();
+        var importGroups = new List<ImportGroupNode>();
+        var imports = new List<ImportNode>();
 
         foreach (var element in projectElement.Elements())
         {
@@ -72,10 +95,18 @@ internal class Parser
                     var target = ParseTarget(element);
                     targets.Add(target);
                     break;
+                case TagNames.ImportGroup:
+                    var importGroup = ParseImportGroup(element);
+                    importGroups.Add(importGroup);
+                    break;
+                case TagNames.Import:
+                    var import = ParseImport(element);
+                    imports.Add(import);
+                    break;
             }
         }
 
-        return new ProjectNode(projectElement, propertyGroups, itemGroups, targets);
+        return new ProjectNode(projectElement, propertyGroups, itemGroups, targets, importGroups, imports);
     }
 
     private PropertyGroupNode ParseProperyGroup(XElement propertyGroupElement)

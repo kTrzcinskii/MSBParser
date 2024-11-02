@@ -139,7 +139,18 @@ internal class SyntaxHighlighter : INodeVisitor
             ap.Run();
         }
     }
-    
+
+    public void VisitImportGroupNode(ImportGroupNode importGroupNode)
+    {
+        HighlightNode(importGroupNode);
+        HighlightList(importGroupNode.Imports.Cast<Node>().ToList());
+    }
+
+    public void VisitImportNode(ImportNode importNode)
+    {
+        HighlightNode(importNode);
+    }
+
     public void VisitItemGroupNode(ItemGroupNode itemGroupNode)
     {
         HighlightNode(itemGroupNode);
@@ -173,6 +184,8 @@ internal class SyntaxHighlighter : INodeVisitor
         HighlightList(projectNode.PropertyGroups.Cast<Node>().ToList());
         HighlightList(projectNode.ItemGroups.Cast<Node>().ToList());
         HighlightList(projectNode.Targets.Cast<Node>().ToList());
+        HighlightList(projectNode.ImportGroups.Cast<Node>().ToList());
+        HighlightList(projectNode.Imports.Cast<Node>().ToList());
     }
 
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode)
