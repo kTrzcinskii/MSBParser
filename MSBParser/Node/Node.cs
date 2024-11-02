@@ -44,7 +44,7 @@ internal abstract class Node
         return (closingLine,  closingPosition);
     }
 
-    private static int LineAndPositionToAbsolutePosition(XObject sourceXml, int line, int position)
+    public static int LineAndPositionToAbsolutePosition(XObject sourceXml, int line, int position)
     {
         var lines = sourceXml.Document!.ToString(SaveOptions.DisableFormatting).Split(Environment.NewLine);
         int id = 0;
