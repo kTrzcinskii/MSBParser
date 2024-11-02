@@ -7,18 +7,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Menu VerticalAlignment="Top" Height="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu VerticalAlignment="Top" Grid.Row="0">
             <MenuItem Header="File">
                 <MenuItem Header="Open .csproj" Click="OpenCsprojFile_Click"/>
             </MenuItem>
         </Menu>
-        <RichTextBox Name="EditorRichTextBox" 
+        <RichTextBox Name="EditorRichTextBox" Grid.Row="1" 
                  VerticalScrollBarVisibility="Auto" 
                  HorizontalScrollBarVisibility="Auto" 
-                 Margin="0,30,0,0" 
                  AcceptsReturn="True" 
                  AcceptsTab="True" 
                  FontFamily="Consolas" 
-                 FontSize="14"/>
+                 FontSize="14"
+                 IsReadOnly="True"/>
     </Grid>
 </Window>
