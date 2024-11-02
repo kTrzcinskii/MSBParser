@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace MSBParser.Node;
+namespace MSBParser.Nodes;
 internal class TargetNode : Node
 {
     public List<TaskNode> Tasks { get; }

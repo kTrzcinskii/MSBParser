@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace MSBParser.Node;
+namespace MSBParser.Nodes;
 internal class TaskNode : Node
 {
     public List<OutputNode> Outputs { get; }

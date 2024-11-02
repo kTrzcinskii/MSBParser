@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using System.Xml.Linq;
 
-namespace MSBParser.Node;
+namespace MSBParser.Nodes;
 internal abstract class Node
 {
     public XElement SourceXml { get; }

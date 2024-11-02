@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace MSBParser.Node;
+namespace MSBParser.Nodes;
 internal class PropertyNode : Node
 {
     public PropertyNode(XElement sourceXml) : base(sourceXml)

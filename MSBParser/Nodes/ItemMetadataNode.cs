@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace MSBParser.Node;
+namespace MSBParser.Nodes;
 internal class ItemMetadataNode : Node
 {
     public ItemMetadataNode(XElement sourceXml) : base(sourceXml)

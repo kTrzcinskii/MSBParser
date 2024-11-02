@@ -3,7 +3,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Xml;
 using System.Xml.Linq;
-using MSBParser.Node;
+using MSBParser.Nodes;
 
 namespace MSBParser;
 
@@ -18,7 +18,7 @@ internal class SyntaxHighlighter : INodeVisitor
         _textBox = richTextBox;
     }
 
-    private void HighlightList(List<Node.Node> nodes)
+    private void HighlightList(List<Node> nodes)
     {
         foreach (var node in nodes)
         {
@@ -26,7 +26,7 @@ internal class SyntaxHighlighter : INodeVisitor
         }
     }
 
-    private void HighlightNode(Node.Node node)
+    private void HighlightNode(Node node)
     {
         QueueAddOpeningTagHighlight(node);
         QueueAddClosingTagHighlight(node);
@@ -39,7 +39,7 @@ internal class SyntaxHighlighter : INodeVisitor
         _higlightQueue.Enqueue(ap, -position);
     }
     
-    private void QueueAddOpeningTagHighlight(Node.Node node)
+    private void QueueAddOpeningTagHighlight(Node node)
     {
         string name = node.SourceXml.Name.LocalName;
         int position = node.StartPosition + StartOffset;
@@ -54,7 +54,7 @@ internal class SyntaxHighlighter : INodeVisitor
         AddToQueue(ap, position);
     }
     
-    private void QueueAddClosingTagHighlight(Node.Node node)
+    private void QueueAddClosingTagHighlight(Node node)
     {
         if (node.EndPosition == null)
         {
@@ -73,7 +73,7 @@ internal class SyntaxHighlighter : INodeVisitor
         AddToQueue(ap, position);
     }
 
-    private void QueueAddAttributesHighlight(Node.Node node)
+    private void QueueAddAttributesHighlight(Node node)
     {
         foreach (var attribute in node.SourceXml.Attributes())
         {
@@ -81,7 +81,7 @@ internal class SyntaxHighlighter : INodeVisitor
                 continue;
             int line = attrLineInfo.LineNumber - 1;
             int position = attrLineInfo.LinePosition - 1;
-            int absolutePosition = Node.Node.LineAndPositionToAbsolutePosition(attribute, line, position);
+            int absolutePosition = Node.LineAndPositionToAbsolutePosition(attribute, line, position);
             QueueAddAttributeHighlight(attribute, absolutePosition);
         }
     }
@@ -168,13 +168,13 @@ internal class SyntaxHighlighter : INodeVisitor
     public void VisitProjectNode(ProjectNode projectNode)
     {
         HighlightNode(projectNode);
-        HighlightList(projectNode.PropertyGroups.Cast<Node.Node>().ToList());
+        HighlightList(projectNode.PropertyGroups.Cast<Node>().ToList());
     }
 
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode)
     {
         HighlightNode(propertyGroupNode);
-        HighlightList(propertyGroupNode.Properties.Cast<Node.Node>().ToList());
+        HighlightList(propertyGroupNode.Properties.Cast<Node>().ToList());
     }
 
     public void VisitPropertyNode(PropertyNode propertyNode)

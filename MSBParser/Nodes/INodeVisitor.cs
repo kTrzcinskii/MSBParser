@@ -1,6 +1,4 @@
-﻿using MSBParser.Node;
-
-namespace MSBParser;
+﻿namespace MSBParser.Nodes;
 
 internal interface INodeVisitor
 {
