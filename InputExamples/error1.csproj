@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <El1 />
+    <El2 />
+  </PropertyGroup>
+  <Unknown_tag> unknown </Unknown_tag>
+  <Choose>
+    <Unknown_tag_inside_choose />
+    <When />
+    <Otherwise />
+  </Choose>
+
+  <Choose>
+    <Otherwise problem="Missing when tag" />
+  </Choose>
+</Project>

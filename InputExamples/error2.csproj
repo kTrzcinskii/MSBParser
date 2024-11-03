@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+    <El1 />
+    <El2 />
+  </PropertyGroup>
+  <Unknown_tag> unknown </Unknown_tag>
+  <ImportGroup>
+    <NotImport />
+    <Import />
+    <NotImport />
+  </ImportGroup>
+  <Import />
+  <NotImport />
+
+  <ProjectExtensions>
+	  First
+  </ProjectExtensions>
+  <ProjectExtensions>
+	  Second
+  </ProjectExtensions>
+
+  <Sdk>
+    <WithChildren />
+  </Sdk>
+</Project>

@@ -13,6 +13,8 @@ When developing the app I used [Microsoft Docs](https://learn.microsoft.com/en-u
 
 Currently, the application only checks for syntax errors in "Elements" (e.g., it shows an error if an unknown tag is found inside `Project`). However, no checks are made on the attributes and their values (meaning that if a tag should always have an attribute and the attribute is not provided, MSBParser will **not** consider it an error).
 
+If you want to see how the application works, feel free to use files from [InputExamples](InputExamples) — they contain examples of various tags and cases, both correct and incorrect.
+
 ## Examples
 
 - MSBuild file without any errors:
