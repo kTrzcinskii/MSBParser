@@ -9,8 +9,9 @@ internal static class TagNames
     public const string Output = "Output";
     public const string Import = "Import";
     public const string ImportGroup = "ImportGroup";
+    public const string ItemDefinitionGroup = "ItemDefinitionGroup";
 
-    private static readonly string[] Tags = [Project, PropertyGroup, ItemGroup, Target, OnError, Output, ImportGroup, Import];
+    private static readonly string[] Tags = [Project, PropertyGroup, ItemGroup, Target, OnError, Output, ImportGroup, Import, ItemDefinitionGroup];
 
     public static bool IsAnyOfTags(string tagName)
     {

@@ -151,6 +151,12 @@ internal class SyntaxHighlighter : INodeVisitor
         HighlightNode(importNode);
     }
 
+    public void VisitItemDefinitionGroupNode(ItemDefinitionGroupNode itemDefinitionGroupNode)
+    {
+        HighlightNode(itemDefinitionGroupNode);
+        HighlightList(itemDefinitionGroupNode.Items.Cast<Node>().ToList());
+    }
+
     public void VisitItemGroupNode(ItemGroupNode itemGroupNode)
     {
         HighlightNode(itemGroupNode);
@@ -186,6 +192,7 @@ internal class SyntaxHighlighter : INodeVisitor
         HighlightList(projectNode.Targets.Cast<Node>().ToList());
         HighlightList(projectNode.ImportGroups.Cast<Node>().ToList());
         HighlightList(projectNode.Imports.Cast<Node>().ToList());
+        HighlightList(projectNode.ItemDefinitionGroups.Cast<Node>().ToList());
     }
 
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode)

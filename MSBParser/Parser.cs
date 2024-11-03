@@ -44,6 +44,12 @@ internal class Parser
         return new ImportNode(importElement);
     }
 
+    private ItemDefinitionGroupNode ParseItemDefinitionGroup(XElement itemDefinitionGroupElement)
+    {
+        var items = itemDefinitionGroupElement.Elements().Select(ParseItem).ToList();
+        return new ItemDefinitionGroupNode(itemDefinitionGroupElement, items);
+    }
+    
     private ItemGroupNode ParseItemGroup(XElement itemGroupElement)
     {
         var items = itemGroupElement.Elements().Select(ParseItem).ToList();
@@ -78,6 +84,7 @@ internal class Parser
         var targets = new List<TargetNode>();
         var importGroups = new List<ImportGroupNode>();
         var imports = new List<ImportNode>();
+        var itemDefinitionGroups = new List<ItemDefinitionGroupNode>();
 
         foreach (var element in projectElement.Elements())
         {
@@ -103,10 +110,14 @@ internal class Parser
                     var import = ParseImport(element);
                     imports.Add(import);
                     break;
+                case TagNames.ItemDefinitionGroup:
+                    var itemDefintionGroup = ParseItemDefinitionGroup(element);
+                    itemDefinitionGroups.Add(itemDefintionGroup);
+                    break;
             }
         }
 
-        return new ProjectNode(projectElement, propertyGroups, itemGroups, targets, importGroups, imports);
+        return new ProjectNode(projectElement, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups);
     }
 
     private PropertyGroupNode ParseProperyGroup(XElement propertyGroupElement)
