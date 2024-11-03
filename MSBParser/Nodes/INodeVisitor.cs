@@ -10,6 +10,8 @@ internal interface INodeVisitor
     public void VisitItemNode(ItemNode itemNode);
     public void VisitOnErrorNode(OnErrorNode onErrorNode);
     public void VisitOutputNode(OutputNode outputNode);
+    public void VisitParameterGroupNode(ParameterGroupNode parameterGroupNode);
+    public void VisitParameterNode(ParameterNode parameterNode);
     public void VisitProjectNode(ProjectNode projectNode);
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode);
     public void VisitPropertyNode(PropertyNode propertyNode);

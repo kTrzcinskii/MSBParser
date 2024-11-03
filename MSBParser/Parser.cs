@@ -76,6 +76,17 @@ internal class Parser
     {
         return new OutputNode(outputElement);
     }
+
+    private ParameterGroupNode ParseParameterGroup(XElement parameterGroupElement)
+    {
+        var parameters = parameterGroupElement.Elements().Select(ParseParameter).ToList();
+        return new ParameterGroupNode(parameterGroupElement, parameters);
+    }
+    
+    private ParameterNode ParseParameter(XElement parameterElement)
+    {
+        return new ParameterNode(parameterElement);
+    }
     
     private ProjectNode ParseProject(XElement projectElement)
     {

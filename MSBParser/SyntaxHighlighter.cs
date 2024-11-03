@@ -184,6 +184,17 @@ internal class SyntaxHighlighter : INodeVisitor
         HighlightNode(outputNode);
     }
 
+    public void VisitParameterGroupNode(ParameterGroupNode parameterGroupNode)
+    {
+        HighlightNode(parameterGroupNode);
+        HighlightList(parameterGroupNode.Parameters.Cast<Node>().ToList());
+    }
+
+    public void VisitParameterNode(ParameterNode parameterNode)
+    {
+        HighlightNode(parameterNode);
+    }
+
     public void VisitProjectNode(ProjectNode projectNode)
     {
         HighlightNode(projectNode);
