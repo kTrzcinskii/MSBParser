@@ -113,6 +113,7 @@ internal class Parser
         var imports = new List<ImportNode>();
         var itemDefinitionGroups = new List<ItemDefinitionGroupNode>();
         var parsingErrors = new List<ParsingErrorNode>();
+        var usingTasks = new List<UsingTaskNode>();
 
         foreach (var element in projectElement.Elements())
         {
@@ -142,6 +143,10 @@ internal class Parser
                     var itemDefintionGroup = ParseItemDefinitionGroup(element);
                     itemDefinitionGroups.Add(itemDefintionGroup);
                     break;
+                case TagNames.UsingTask:
+                    var usingTask = ParseUsingTask(element);
+                    usingTasks.Add(usingTask);
+                    break;
                 default:
                     var parsingError = CreateParsingErrorNode(element, $"Unexpected tag {element.Name.LocalName
                     } in 'Project' tag.");
@@ -150,7 +155,7 @@ internal class Parser
             }
         }
 
-        return new ProjectNode(projectElement, parsingErrors, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups);
+        return new ProjectNode(projectElement, parsingErrors, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups, usingTasks);
     }
 
     private PropertyGroupNode ParseProperyGroup(XElement propertyGroupElement)
@@ -197,6 +202,11 @@ internal class Parser
         return new TargetNode(targetElement, [], tasks, propertyGroups, itemGroups, onErrors);
     }
 
+    private TaskForUsingNode ParseTaskForUsing(XElement taskForUsingElement)
+    {
+        return new TaskForUsingNode(taskForUsingElement, []);
+    }
+    
     private TaskNode ParseTask(XElement taskElement)
     {
         var outputs = new List<OutputNode>();
@@ -216,6 +226,27 @@ internal class Parser
             }
         }
         return new TaskNode(taskElement, parsingErrors, outputs);
+    }
+
+    private UsingTaskNode ParseUsingTask(XElement usingTaskElement)
+    {
+        var parametersGroups = new List<ParameterGroupNode>();
+        var tasks = new List<TaskForUsingNode>();
+        foreach (var element in usingTaskElement.Elements())
+        {
+            switch (element.Name.LocalName)
+            {
+                case TagNames.ParameterGroup:
+                    var parameterGroup = ParseParameterGroup(element);
+                    parametersGroups.Add(parameterGroup);
+                    break;
+                default:
+                    var task = ParseTaskForUsing(element);
+                    tasks.Add(task);
+                    break;
+            }
+        }
+        return new UsingTaskNode(usingTaskElement, [], parametersGroups, tasks);
     }
 
     private List<ParsingErrorNode> AllChildrenToParsingErrors(XElement element, string tagName)

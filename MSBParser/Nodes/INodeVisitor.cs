@@ -17,5 +17,7 @@ internal interface INodeVisitor
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode);
     public void VisitPropertyNode(PropertyNode propertyNode);
     public void VisitTargetNode(TargetNode targetNode);
+    public void VisitTaskForUsingNode(TaskForUsingNode taskForUsingNode);
     public void VisitTaskNode(TaskNode taskNode);
+    public void VisitUsingTaskNode(UsingTaskNode usingTaskNode);
 }
