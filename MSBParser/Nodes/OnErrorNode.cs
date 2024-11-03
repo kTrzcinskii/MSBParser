@@ -4,7 +4,7 @@ namespace MSBParser.Nodes;
 
 internal class OnErrorNode : Node
 {
-    public OnErrorNode(XElement sourceXml) : base(sourceXml)
+    public OnErrorNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors) : base(sourceXml, parsingErrors)
     {
     }
 

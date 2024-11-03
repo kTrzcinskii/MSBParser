@@ -26,6 +26,7 @@ internal class Parser
     private ImportGroupNode ParseImportGroup(XElement importGroupElement)
     {
         var imports = new List<ImportNode>();
+        var parsingErrors = new List<ParsingErrorNode>();
         foreach (var element in importGroupElement.Elements())
         {
             switch (element.Name.LocalName)
@@ -34,58 +35,73 @@ internal class Parser
                     var import = ParseImport(element);
                     imports.Add(import);
                     break;
+                default:
+                    var parsingError = CreateParsingErrorNode(element,
+                        $"Unexpected tag {element.Name.LocalName} in 'ImportGroup'. Expects 'Import' tag");
+                    parsingErrors.Add(parsingError);
+                    break;
             }
         }
-        return new ImportGroupNode(importGroupElement, imports);
+        return new ImportGroupNode(importGroupElement, parsingErrors, imports);
     }
 
     private ImportNode ParseImport(XElement importElement)
     {
-        return new ImportNode(importElement);
+        var parsingErrors = AllChildrenToParsingErrors(importElement, "Import");
+        return new ImportNode(importElement, parsingErrors);
     }
 
     private ItemDefinitionGroupNode ParseItemDefinitionGroup(XElement itemDefinitionGroupElement)
     {
         var items = itemDefinitionGroupElement.Elements().Select(ParseItem).ToList();
-        return new ItemDefinitionGroupNode(itemDefinitionGroupElement, items);
+        return new ItemDefinitionGroupNode(itemDefinitionGroupElement, [], items);
     }
     
     private ItemGroupNode ParseItemGroup(XElement itemGroupElement)
     {
         var items = itemGroupElement.Elements().Select(ParseItem).ToList();
-        return new ItemGroupNode(itemGroupElement, items);
+        return new ItemGroupNode(itemGroupElement, [], items);
     }
 
     private ItemMetadataNode ParseItemMetadata(XElement itemMetadataElement)
     {
-        return new ItemMetadataNode(itemMetadataElement);
+        var parsingErrors = AllChildrenToParsingErrors(itemMetadataElement, "ItemMetadata");
+        return new ItemMetadataNode(itemMetadataElement, parsingErrors);
     }
 
     private ItemNode ParseItem(XElement itemElement)
     {
         var itemMetadatas = itemElement.Elements().Select(ParseItemMetadata).ToList();
-        return new ItemNode(itemElement, itemMetadatas);
+        return new ItemNode(itemElement, [], itemMetadatas);
     }
 
     private OnErrorNode ParseOnError(XElement onErrorElement)
     {
-        return new OnErrorNode(onErrorElement);
+        var parsingErrors = AllChildrenToParsingErrors(onErrorElement, "OnError");
+        return new OnErrorNode(onErrorElement, parsingErrors);
     }
     
     private OutputNode ParseOutput(XElement outputElement)
     {
-        return new OutputNode(outputElement);
+        var parsingErrors = AllChildrenToParsingErrors(outputElement, "Output");
+        return new OutputNode(outputElement, parsingErrors);
     }
 
     private ParameterGroupNode ParseParameterGroup(XElement parameterGroupElement)
     {
         var parameters = parameterGroupElement.Elements().Select(ParseParameter).ToList();
-        return new ParameterGroupNode(parameterGroupElement, parameters);
+        return new ParameterGroupNode(parameterGroupElement, [], parameters);
     }
     
     private ParameterNode ParseParameter(XElement parameterElement)
     {
-        return new ParameterNode(parameterElement);
+        var parsingErrors = AllChildrenToParsingErrors(parameterElement, "Parameter");
+        return new ParameterNode(parameterElement, parsingErrors);
+    }
+
+    private ParsingErrorNode CreateParsingErrorNode(XElement parsingErrorElement, string message)
+    {
+        return new ParsingErrorNode(parsingErrorElement, message);
     }
     
     private ProjectNode ParseProject(XElement projectElement)
@@ -96,6 +112,7 @@ internal class Parser
         var importGroups = new List<ImportGroupNode>();
         var imports = new List<ImportNode>();
         var itemDefinitionGroups = new List<ItemDefinitionGroupNode>();
+        var parsingErrors = new List<ParsingErrorNode>();
 
         foreach (var element in projectElement.Elements())
         {
@@ -125,21 +142,27 @@ internal class Parser
                     var itemDefintionGroup = ParseItemDefinitionGroup(element);
                     itemDefinitionGroups.Add(itemDefintionGroup);
                     break;
+                default:
+                    var parsingError = CreateParsingErrorNode(element, $"Unexpected tag {element.Name.LocalName
+                    } in 'Project' tag.");
+                    parsingErrors.Add(parsingError);
+                    break;
             }
         }
 
-        return new ProjectNode(projectElement, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups);
+        return new ProjectNode(projectElement, parsingErrors, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups);
     }
 
     private PropertyGroupNode ParseProperyGroup(XElement propertyGroupElement)
     {
         var properties = propertyGroupElement.Elements().Select(ParseProperty).ToList();
-        return new PropertyGroupNode(propertyGroupElement, properties);
+        return new PropertyGroupNode(propertyGroupElement, [], properties);
     }
 
     private PropertyNode ParseProperty(XElement propertyElement)
     {
-        return new PropertyNode(propertyElement);
+        var parsingErrors = AllChildrenToParsingErrors(propertyElement, "Property");
+        return new PropertyNode(propertyElement, parsingErrors);
     }
 
     private TargetNode ParseTarget(XElement targetElement)
@@ -171,12 +194,13 @@ internal class Parser
                     break;
             }
         }
-        return new TargetNode(targetElement, tasks, propertyGroups, itemGroups, onErrors);
+        return new TargetNode(targetElement, [], tasks, propertyGroups, itemGroups, onErrors);
     }
 
     private TaskNode ParseTask(XElement taskElement)
     {
         var outputs = new List<OutputNode>();
+        var parsingErrors = new List<ParsingErrorNode>();
         foreach (var element in taskElement.Elements())
         {
             switch (element.Name.LocalName)
@@ -185,8 +209,19 @@ internal class Parser
                     var output = ParseOutput(element);
                     outputs.Add(output);
                     break;
+                default:
+                    var parsingError = CreateParsingErrorNode(element, $"Unexpected tag {element.Name.LocalName} in 'Task'. Expected 'Output' tag.");
+                    parsingErrors.Add(parsingError);
+                    break;
             }
         }
-        return new TaskNode(taskElement, outputs);
+        return new TaskNode(taskElement, parsingErrors, outputs);
+    }
+
+    private List<ParsingErrorNode> AllChildrenToParsingErrors(XElement element, string tagName)
+    {
+        var parsingErrors = element.Elements().Select((el) =>
+            CreateParsingErrorNode(el, $"Unexpected tag in {tagName}. {tagName} should not have any child.")).ToList();
+        return parsingErrors;
     }
 }

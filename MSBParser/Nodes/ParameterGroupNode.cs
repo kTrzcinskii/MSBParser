@@ -6,7 +6,7 @@ internal class ParameterGroupNode : Node
 {
     public List<ParameterNode> Parameters { get; }
     
-    public ParameterGroupNode(XElement sourceXml, List<ParameterNode> parameters) : base(sourceXml)
+    public ParameterGroupNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors, List<ParameterNode> parameters) : base(sourceXml, parsingErrors)
     {
         Parameters = parameters;
     }

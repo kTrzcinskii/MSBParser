@@ -4,7 +4,7 @@ namespace MSBParser.Nodes;
 
 internal class OutputNode : Node
 {
-    public OutputNode(XElement sourceXml) : base(sourceXml)
+    public OutputNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors) : base(sourceXml, parsingErrors)
     {
     }
 

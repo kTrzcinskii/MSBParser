@@ -5,7 +5,7 @@ internal class TaskNode : Node
 {
     public List<OutputNode> Outputs { get; }
     
-    public TaskNode(XElement sourceXml, List<OutputNode> outputs) : base(sourceXml)
+    public TaskNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors, List<OutputNode> outputs) : base(sourceXml, parsingErrors)
     {
         Outputs = outputs;
     }

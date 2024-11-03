@@ -3,7 +3,7 @@
 namespace MSBParser.Nodes;
 internal class ItemMetadataNode : Node
 {
-    public ItemMetadataNode(XElement sourceXml) : base(sourceXml)
+    public ItemMetadataNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors) : base(sourceXml, parsingErrors)
     {
     }
 

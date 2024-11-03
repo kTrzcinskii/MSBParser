@@ -3,7 +3,7 @@
 namespace MSBParser.Nodes;
 internal class PropertyNode : Node
 {
-    public PropertyNode(XElement sourceXml) : base(sourceXml)
+    public PropertyNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors) : base(sourceXml, parsingErrors)
     {
     }
 

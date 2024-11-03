@@ -25,6 +25,7 @@ public partial class MainWindow : Window
         if (openFileDialog.ShowDialog() == true)
         {
             string fileContent = File.ReadAllText(openFileDialog.FileName).Trim();
+            EditorRichTextBox.Document.Blocks.Clear();
             EditorRichTextBox.Document.Blocks.Add(new Paragraph(new Run(fileContent)));
             var parser = new Parser(openFileDialog.FileName);
             var project = parser.Parse();

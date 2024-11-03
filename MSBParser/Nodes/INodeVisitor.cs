@@ -12,6 +12,7 @@ internal interface INodeVisitor
     public void VisitOutputNode(OutputNode outputNode);
     public void VisitParameterGroupNode(ParameterGroupNode parameterGroupNode);
     public void VisitParameterNode(ParameterNode parameterNode);
+    public void VisitParsingErrorNode(ParsingErrorNode parsingErrorNode);
     public void VisitProjectNode(ProjectNode projectNode);
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode);
     public void VisitPropertyNode(PropertyNode propertyNode);

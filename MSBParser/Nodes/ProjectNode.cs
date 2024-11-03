@@ -10,7 +10,7 @@ internal class ProjectNode : Node
     public List<ImportNode> Imports { get; }
     public List<ItemDefinitionGroupNode> ItemDefinitionGroups { get; }
 
-    public ProjectNode(XElement sourceXml, List<PropertyGroupNode> propertyGroups, List<ItemGroupNode> itemGroups, List<TargetNode> targets, List<ImportGroupNode> importGroups, List<ImportNode> imports, List<ItemDefinitionGroupNode> itemDefinitionGroups) : base(sourceXml)
+    public ProjectNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors, List<PropertyGroupNode> propertyGroups, List<ItemGroupNode> itemGroups, List<TargetNode> targets, List<ImportGroupNode> importGroups, List<ImportNode> imports, List<ItemDefinitionGroupNode> itemDefinitionGroups) : base(sourceXml, parsingErrors)
     {
         PropertyGroups = propertyGroups;
         ItemGroups = itemGroups;

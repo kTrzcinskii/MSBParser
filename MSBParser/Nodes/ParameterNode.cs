@@ -4,7 +4,7 @@ namespace MSBParser.Nodes;
 
 internal class ParameterNode : Node
 {
-    public ParameterNode(XElement sourceXml) : base(sourceXml)
+    public ParameterNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors) : base(sourceXml, parsingErrors)
     {
     }
 

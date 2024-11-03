@@ -4,7 +4,7 @@ namespace MSBParser.Nodes;
 
 internal class ImportNode : Node
 {
-    public ImportNode(XElement sourceXml) : base(sourceXml)
+    public ImportNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors) : base(sourceXml, parsingErrors)
     {
     }
 

@@ -8,7 +8,7 @@ internal class TargetNode : Node
     public List<ItemGroupNode> ItemGroups { get; }
     public List<OnErrorNode> OnErrors { get; }
     
-    public TargetNode(XElement sourceXml, List<TaskNode> tasks, List<PropertyGroupNode> propertyGroups, List<ItemGroupNode> itemGroups, List<OnErrorNode> onErrors) : base(sourceXml)
+    public TargetNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors, List<TaskNode> tasks, List<PropertyGroupNode> propertyGroups, List<ItemGroupNode> itemGroups, List<OnErrorNode> onErrors) : base(sourceXml, parsingErrors)
     {
         Tasks = tasks;
         PropertyGroups = propertyGroups;

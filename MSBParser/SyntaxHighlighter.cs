@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Xml;
@@ -11,7 +12,7 @@ internal class SyntaxHighlighter : INodeVisitor
 {
     private RichTextBox _textBox;
     private PriorityQueue<ApplyHighlight, int> _higlightQueue = new();
-    private const int StartOffset = 4;
+    private const int StartOffset = 2;
 
     public SyntaxHighlighter(RichTextBox richTextBox)
     {
@@ -31,6 +32,7 @@ internal class SyntaxHighlighter : INodeVisitor
         QueueAddOpeningTagHighlight(node);
         QueueAddClosingTagHighlight(node);
         QueueAddAttributesHighlight(node);
+        HighlightList(node.ParsingErrors.Cast<Node>().ToList());
     }
 
     private void AddToQueue(ApplyHighlight ap, int position)
@@ -118,9 +120,36 @@ internal class SyntaxHighlighter : INodeVisitor
         var apValue = new ApplyHighlight(() => attributeValueRange.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Goldenrod));
         AddToQueue(apValue, valuePosition);
     }
-    
-    public void HighlightContent(ProjectNode project)
+
+    private void QueueAddError(ParsingErrorNode node)
     {
+        var underline = new TextDecoration
+        {
+            Location = TextDecorationLocation.Underline,
+            Pen = new Pen(Brushes.Red, 1),
+            PenThicknessUnit = TextDecorationUnit.FontRecommended
+        };
+        int position = node.StartPosition + StartOffset;
+        int length = node.SourceXml.ToString(SaveOptions.DisableFormatting).Length;
+        var start = _textBox.Document.ContentStart.GetPositionAtOffset(position, LogicalDirection.Forward);
+        var end = start?.GetPositionAtOffset(length, LogicalDirection.Forward);
+        if (start == null || end == null)
+        {
+            return;
+        }
+
+        var errorRange = new TextRange(start, end);
+        var ap = new ApplyHighlight(() =>
+            errorRange.ApplyPropertyValue(Inline.TextDecorationsProperty, new TextDecorationCollection { underline }));
+        AddToQueue(ap, position);
+    }
+    
+    public void HighlightContent(ProjectNode? project)
+    {
+        if (project == null)
+        {
+            return;
+        }
         PrepareQueue(project);
         ApplyAllHighlights();
     }
@@ -193,6 +222,11 @@ internal class SyntaxHighlighter : INodeVisitor
     public void VisitParameterNode(ParameterNode parameterNode)
     {
         HighlightNode(parameterNode);
+    }
+
+    public void VisitParsingErrorNode(ParsingErrorNode parsingErrorNode)
+    {
+        QueueAddError(parsingErrorNode);
     }
 
     public void VisitProjectNode(ProjectNode projectNode)

@@ -6,7 +6,7 @@ internal class ImportGroupNode : Node
 {
     public List<ImportNode> Imports { get; }
     
-    public ImportGroupNode(XElement sourceXml, List<ImportNode> imports) : base(sourceXml)
+    public ImportGroupNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors, List<ImportNode> imports) : base(sourceXml, parsingErrors)
     {
         Imports = imports;
     }

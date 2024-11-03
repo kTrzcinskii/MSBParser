@@ -7,10 +7,12 @@ internal abstract class Node
     public XElement SourceXml { get; }
     public int StartPosition { get; }
     public int? EndPosition { get; }
+    public List<ParsingErrorNode> ParsingErrors { get; }
 
-    public Node(XElement sourceXml)
+    public Node(XElement sourceXml, List<ParsingErrorNode> parsingErrors)
     {
         SourceXml = sourceXml;
+        ParsingErrors = parsingErrors;
         // should throw some exception here
         if (SourceXml is not IXmlLineInfo lineInfo || !lineInfo.HasLineInfo())
             return;
