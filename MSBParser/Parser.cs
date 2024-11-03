@@ -103,6 +103,11 @@ internal class Parser
     {
         return new ParsingErrorNode(parsingErrorElement, message);
     }
+
+    private ProjectExtensionsNode ParseProjectExtensions(XElement projectExtensionsElement)
+    {
+        return new ProjectExtensionsNode(projectExtensionsElement, []);
+    }
     
     private ProjectNode ParseProject(XElement projectElement)
     {
@@ -114,6 +119,7 @@ internal class Parser
         var itemDefinitionGroups = new List<ItemDefinitionGroupNode>();
         var parsingErrors = new List<ParsingErrorNode>();
         var usingTasks = new List<UsingTaskNode>();
+        ProjectExtensionsNode? projectExtensions = null;
 
         foreach (var element in projectElement.Elements())
         {
@@ -147,6 +153,18 @@ internal class Parser
                     var usingTask = ParseUsingTask(element);
                     usingTasks.Add(usingTask);
                     break;
+                case TagNames.ProjectExtensions:
+                    if (projectExtensions == null)
+                    {
+                        projectExtensions = ParseProjectExtensions(element);
+                    }
+                    else
+                    {
+                        var projectExtensionsError = CreateParsingErrorNode(element,
+                            "Only one 'ProjectExtensions' tag can be present inside 'Project'.");
+                        parsingErrors.Add(projectExtensionsError);
+                    }
+                    break;
                 default:
                     var parsingError = CreateParsingErrorNode(element, $"Unexpected tag {element.Name.LocalName
                     } in 'Project' tag.");
@@ -155,7 +173,7 @@ internal class Parser
             }
         }
 
-        return new ProjectNode(projectElement, parsingErrors, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups, usingTasks);
+        return new ProjectNode(projectElement, parsingErrors, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups, usingTasks, projectExtensions);
     }
 
     private PropertyGroupNode ParseProperyGroup(XElement propertyGroupElement)

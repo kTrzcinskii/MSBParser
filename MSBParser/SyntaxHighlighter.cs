@@ -250,6 +250,11 @@ internal class SyntaxHighlighter : INodeVisitor
         AddErrorToList(parsingErrorNode);
     }
 
+    public void VisitProjectExtensionsNode(ProjectExtensionsNode projectExtensionsNode)
+    {
+        HighlightNode(projectExtensionsNode);
+    }
+
     public void VisitProjectNode(ProjectNode projectNode)
     {
         HighlightNode(projectNode);
@@ -260,6 +265,10 @@ internal class SyntaxHighlighter : INodeVisitor
         HighlightList(projectNode.Imports.Cast<Node>().ToList());
         HighlightList(projectNode.ItemDefinitionGroups.Cast<Node>().ToList());
         HighlightList(projectNode.UsingTasks.Cast<Node>().ToList());
+        if (projectNode.ProjectExtensions != null)
+        {
+            HighlightNode(projectNode.ProjectExtensions);
+        }
     }
 
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode)
