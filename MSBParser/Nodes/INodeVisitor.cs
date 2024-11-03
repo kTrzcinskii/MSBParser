@@ -17,6 +17,7 @@ internal interface INodeVisitor
     public void VisitProjectNode(ProjectNode projectNode);
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode);
     public void VisitPropertyNode(PropertyNode propertyNode);
+    public void VisitSdkNode(SdkNode sdkNode);
     public void VisitTargetNode(TargetNode targetNode);
     public void VisitTaskForUsingNode(TaskForUsingNode taskForUsingNode);
     public void VisitTaskNode(TaskNode taskNode);

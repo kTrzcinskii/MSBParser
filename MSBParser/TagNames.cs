@@ -13,8 +13,9 @@ internal static class TagNames
     public const string ParameterGroup = "ParameterGroup";
     public const string UsingTask = "UsingTask";
     public const string ProjectExtensions = "ProjectExtensions";
+    public const string Sdk = "Sdk";
 
-    private static readonly string[] Tags = [Project, PropertyGroup, ItemGroup, Target, OnError, Output, ImportGroup, Import, ItemDefinitionGroup, ParameterGroup, UsingTask, ProjectExtensions];
+    private static readonly string[] Tags = [Project, PropertyGroup, ItemGroup, Target, OnError, Output, ImportGroup, Import, ItemDefinitionGroup, ParameterGroup, UsingTask, ProjectExtensions, Sdk];
 
     public static bool IsAnyOfTags(string tagName)
     {

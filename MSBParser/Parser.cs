@@ -120,6 +120,7 @@ internal class Parser
         var parsingErrors = new List<ParsingErrorNode>();
         var usingTasks = new List<UsingTaskNode>();
         ProjectExtensionsNode? projectExtensions = null;
+        var sdks = new List<SdkNode>();
 
         foreach (var element in projectElement.Elements())
         {
@@ -165,6 +166,10 @@ internal class Parser
                         parsingErrors.Add(projectExtensionsError);
                     }
                     break;
+                case TagNames.Sdk:
+                    var sdk = ParseSdk(element);
+                    sdks.Add(sdk);
+                    break;
                 default:
                     var parsingError = CreateParsingErrorNode(element, $"Unexpected tag {element.Name.LocalName
                     } in 'Project' tag.");
@@ -173,7 +178,7 @@ internal class Parser
             }
         }
 
-        return new ProjectNode(projectElement, parsingErrors, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups, usingTasks, projectExtensions);
+        return new ProjectNode(projectElement, parsingErrors, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups, usingTasks, projectExtensions, sdks);
     }
 
     private PropertyGroupNode ParseProperyGroup(XElement propertyGroupElement)
@@ -186,6 +191,12 @@ internal class Parser
     {
         var parsingErrors = AllChildrenToParsingErrors(propertyElement, "Property");
         return new PropertyNode(propertyElement, parsingErrors);
+    }
+
+    private SdkNode ParseSdk(XElement sdkElement)
+    {
+        var parsingErrors = AllChildrenToParsingErrors(sdkElement, "Sdk");
+        return new SdkNode(sdkElement, parsingErrors);
     }
 
     private TargetNode ParseTarget(XElement targetElement)

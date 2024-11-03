@@ -24,8 +24,13 @@ internal class SyntaxHighlighter : INodeVisitor
     {
         foreach (var node in nodes)
         {
-            node.AcceptVisitor(this);
+            HighlightSingle(node);
         }
+    }
+
+    private void HighlightSingle(Node node)
+    {
+        node.AcceptVisitor(this);
     }
 
     private void HighlightNode(Node node)
@@ -267,8 +272,9 @@ internal class SyntaxHighlighter : INodeVisitor
         HighlightList(projectNode.UsingTasks.Cast<Node>().ToList());
         if (projectNode.ProjectExtensions != null)
         {
-            HighlightNode(projectNode.ProjectExtensions);
+            HighlightSingle(projectNode.ProjectExtensions);
         }
+        HighlightList(projectNode.Sdks.Cast<Node>().ToList());
     }
 
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode)
@@ -280,6 +286,11 @@ internal class SyntaxHighlighter : INodeVisitor
     public void VisitPropertyNode(PropertyNode propertyNode)
     {
         HighlightNode(propertyNode);
+    }
+
+    public void VisitSdkNode(SdkNode sdkNode)
+    {
+        HighlightNode(sdkNode);
     }
 
     public void VisitTargetNode(TargetNode targetNode)
