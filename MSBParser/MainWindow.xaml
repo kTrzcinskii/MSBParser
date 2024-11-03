@@ -16,13 +16,27 @@
                 <MenuItem Header="Open .csproj" Click="OpenCsprojFile_Click"/>
             </MenuItem>
         </Menu>
-        <RichTextBox Name="EditorRichTextBox" Grid.Row="1" 
-                 VerticalScrollBarVisibility="Auto" 
-                 HorizontalScrollBarVisibility="Auto" 
-                 AcceptsReturn="True" 
-                 AcceptsTab="True" 
-                 FontFamily="Consolas" 
-                 FontSize="14"
-                 IsReadOnly="True"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.7*"/>
+                <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <RichTextBox Name="EditorRichTextBox" Grid.Column="0" 
+                         VerticalScrollBarVisibility="Auto" 
+                         HorizontalScrollBarVisibility="Auto" 
+                         AcceptsReturn="True" 
+                         AcceptsTab="True" 
+                         FontFamily="Consolas" 
+                         FontSize="14"
+                         IsReadOnly="True"/>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0">Found errors:</Label>
+                <ListBox Grid.Row="1" Name="ErrorsList"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

@@ -13,6 +13,7 @@ internal class SyntaxHighlighter : INodeVisitor
     private RichTextBox _textBox;
     private PriorityQueue<ApplyHighlight, int> _higlightQueue = new();
     private const int StartOffset = 2;
+    public List<ParsingErrorNode> ErrorsList { get; } = new();
 
     public SyntaxHighlighter(RichTextBox richTextBox)
     {
@@ -143,6 +144,11 @@ internal class SyntaxHighlighter : INodeVisitor
             errorRange.ApplyPropertyValue(Inline.TextDecorationsProperty, new TextDecorationCollection { underline }));
         AddToQueue(ap, position);
     }
+
+    private void AddErrorToList(ParsingErrorNode node)
+    {
+        ErrorsList.Add(node);
+    }
     
     public void HighlightContent(ProjectNode? project)
     {
@@ -151,9 +157,10 @@ internal class SyntaxHighlighter : INodeVisitor
             return;
         }
         PrepareQueue(project);
+        SortErrors();
         ApplyAllHighlights();
     }
-
+    
     private void PrepareQueue(ProjectNode project)
     {
         project.AcceptVisitor(this);    
@@ -167,6 +174,11 @@ internal class SyntaxHighlighter : INodeVisitor
             var ap = _higlightQueue.Dequeue();
             ap.Run();
         }
+    }
+
+    private void SortErrors()
+    {
+        ErrorsList.Sort((a, b) => a.StartPosition.CompareTo(b.StartPosition));
     }
 
     public void VisitImportGroupNode(ImportGroupNode importGroupNode)
@@ -227,6 +239,7 @@ internal class SyntaxHighlighter : INodeVisitor
     public void VisitParsingErrorNode(ParsingErrorNode parsingErrorNode)
     {
         QueueAddError(parsingErrorNode);
+        AddErrorToList(parsingErrorNode);
     }
 
     public void VisitProjectNode(ProjectNode projectNode)

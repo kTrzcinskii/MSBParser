@@ -15,4 +15,9 @@ internal class ParsingErrorNode : Node
     {
         visitor.VisitParsingErrorNode(this);
     }
+
+    public override string ToString()
+    {
+        return $"[Line {StartRow}, column {StartColumn}]: {Message}";
+    }
 }

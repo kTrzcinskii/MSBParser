@@ -6,6 +6,8 @@ internal abstract class Node
 {
     public XElement SourceXml { get; }
     public int StartPosition { get; }
+    public int StartRow { get; }
+    public int StartColumn { get; }
     public int? EndPosition { get; }
     public List<ParsingErrorNode> ParsingErrors { get; }
 
@@ -16,11 +18,11 @@ internal abstract class Node
         // should throw some exception here
         if (SourceXml is not IXmlLineInfo lineInfo || !lineInfo.HasLineInfo())
             return;
-        int line = lineInfo.LineNumber - 1;
-        int position = lineInfo.LinePosition - 2;
-        StartPosition = LineAndPositionToAbsolutePosition(sourceXml, line, position) + 1; // +1 for <
+        StartRow = lineInfo.LineNumber - 1;
+        StartColumn = lineInfo.LinePosition - 2;
+        StartPosition = LineAndPositionToAbsolutePosition(sourceXml, StartRow, StartColumn) + 1; // +1 for <
         
-        var (closeLine, closePosition) = CalculateClosingLineAndPosition(sourceXml, line);
+        var (closeLine, closePosition) = CalculateClosingLineAndPosition(sourceXml, StartRow);
         if (closeLine != null && closePosition != null)
         {
             EndPosition = LineAndPositionToAbsolutePosition(sourceXml, closeLine.Value, closePosition.Value) + 2; // + 2 for </

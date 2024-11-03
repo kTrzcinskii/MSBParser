@@ -31,6 +31,7 @@ public partial class MainWindow : Window
             var project = parser.Parse();
             var syntaxHighlighter = new SyntaxHighlighter(EditorRichTextBox);
             syntaxHighlighter.HighlightContent(project);
+            ErrorsList.ItemsSource = syntaxHighlighter.ErrorsList;
         }
     }
 }
