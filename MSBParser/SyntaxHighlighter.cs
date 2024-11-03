@@ -130,8 +130,8 @@ internal class SyntaxHighlighter : INodeVisitor
             Pen = new Pen(Brushes.Red, 1),
             PenThicknessUnit = TextDecorationUnit.FontRecommended
         };
-        int position = node.StartPosition + StartOffset;
-        int length = node.SourceXml.ToString(SaveOptions.DisableFormatting).Length;
+        int position = node.StartPosition + StartOffset - 1; // -1 to also include "<"
+        int length = node.SourceXml.ToString(SaveOptions.DisableFormatting).Length + 1; // + 1 to aslo include "/>"
         var start = _textBox.Document.ContentStart.GetPositionAtOffset(position, LogicalDirection.Forward);
         var end = start?.GetPositionAtOffset(length, LogicalDirection.Forward);
         if (start == null || end == null)
