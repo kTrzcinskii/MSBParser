@@ -79,7 +79,7 @@ internal class Parser
                     break;
                 default:
                     var parsingError = CreateParsingErrorNode(element,
-                        $"Unexpected tag {element.Name.LocalName} in 'ImportGroup'. Expects 'Import' tag");
+                        $"Unexpected tag '{element.Name.LocalName}' in 'ImportGroup'. Expects 'Import' tag");
                     parsingErrors.Add(parsingError);
                     break;
             }
@@ -272,8 +272,8 @@ internal class Parser
                     }
                     break;    
                 default:
-                    var parsingError = CreateParsingErrorNode(element, $"Unexpected tag {element.Name.LocalName
-                    } in 'Project' tag.");
+                    var parsingError = CreateParsingErrorNode(element, $"Unexpected tag '{element.Name.LocalName
+                    }' in 'Project' tag.");
                     parsingErrors.Add(parsingError);
                     break;
             }
@@ -350,7 +350,7 @@ internal class Parser
                     outputs.Add(output);
                     break;
                 default:
-                    var parsingError = CreateParsingErrorNode(element, $"Unexpected tag {element.Name.LocalName} in 'Task'. Expected 'Output' tag.");
+                    var parsingError = CreateParsingErrorNode(element, $"Unexpected tag '{element.Name.LocalName}' in 'Task'. Expected 'Output' tag.");
                     parsingErrors.Add(parsingError);
                     break;
             }
@@ -426,7 +426,7 @@ internal class Parser
     private List<ParsingErrorNode> AllChildrenToParsingErrors(XElement element, string tagName)
     {
         var parsingErrors = element.Elements().Select((el) =>
-            CreateParsingErrorNode(el, $"Unexpected tag in {tagName}. {tagName} should not have any child.")).ToList();
+            CreateParsingErrorNode(el, $"Unexpected tag in '{tagName}'. '{tagName}' should not have any child.")).ToList();
         return parsingErrors;
     }
 }
