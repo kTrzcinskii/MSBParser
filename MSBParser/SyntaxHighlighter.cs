@@ -149,6 +149,14 @@ internal class SyntaxHighlighter : INodeVisitor
     {
         ErrorsList.Add(node);
     }
+
+    public void HighlighXmlError()
+    {
+        var start = _textBox.Document.ContentStart;
+        var end = _textBox.Document.ContentEnd;
+        var documentRange = new TextRange(start, end);
+        documentRange.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Red);
+    }
     
     public void HighlightContent(ProjectNode? project)
     {
