@@ -150,7 +150,7 @@ internal class SyntaxHighlighter : INodeVisitor
         ErrorsList.Add(node);
     }
 
-    public void HighlighXmlError()
+    public void HighlightWholeFileError()
     {
         var start = _textBox.Document.ContentStart;
         var end = _textBox.Document.ContentEnd;

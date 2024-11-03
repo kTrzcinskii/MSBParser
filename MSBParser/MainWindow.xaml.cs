@@ -33,12 +33,18 @@ public partial class MainWindow : Window
             {
                 var parser = new Parser(openFileDialog.FileName);
                 var project = parser.Parse();
+                if (project == null)
+                {
+                    syntaxHighlighter.HighlightWholeFileError();
+                    ErrorsList.ItemsSource = new List<string> { "Missing root 'Project' tag." };
+                    return;
+                }
                 syntaxHighlighter.HighlightContent(project);
                 ErrorsList.ItemsSource = syntaxHighlighter.ErrorsList;
             }
             catch (XmlException exception)
             {
-                syntaxHighlighter.HighlighXmlError();
+                syntaxHighlighter.HighlightWholeFileError();
                 ErrorsList.ItemsSource = new List<string> { $"Failed to parse XML file: {exception.Message}" };
             }
         }
