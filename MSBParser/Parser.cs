@@ -23,6 +23,48 @@ internal class Parser
         return _content.Root is { Name.LocalName: TagNames.Project } ? ParseProject(_content.Root) : null;
     }
 
+    private Node TryParseChoose(XElement chooseElement)
+    {
+        var whens = new List<WhenNode>();
+        OtherwiseNode? otherwise = null;
+        var parsingErrors = new List<ParsingErrorNode>();
+
+        foreach (var element in chooseElement.Elements())
+        {
+            switch (element.Name.LocalName)
+            {
+                case TagNames.When:
+                    var when = ParseWhen(element);
+                    whens.Add(when);
+                    break;
+                case TagNames.Otherwise:
+                    if (otherwise == null)
+                    {
+                        otherwise = ParseOtherwise(element);
+                    }
+                    else
+                    {
+                        var otherwiseError = CreateParsingErrorNode(element,
+                            "Only one 'Otherwise' tag can be present inside 'Choose'.");
+                        parsingErrors.Add(otherwiseError);
+                    }
+                    break;
+                default:
+                    var parsingError = CreateParsingErrorNode(element,
+                        $"Unexpected tag '{element.Name.LocalName}' in 'Choose'.");
+                    parsingErrors.Add(parsingError);
+                    break;
+            }
+        }
+
+        if (whens.Count == 0)
+        {
+            return CreateParsingErrorNode(chooseElement, "'Choose' misses 'When' tag.");
+        }
+
+        return new ChooseNode(chooseElement, parsingErrors, whens, otherwise);
+    }
+    
     private ImportGroupNode ParseImportGroup(XElement importGroupElement)
     {
         var imports = new List<ImportNode>();
@@ -80,6 +122,50 @@ internal class Parser
         var parsingErrors = AllChildrenToParsingErrors(onErrorElement, "OnError");
         return new OnErrorNode(onErrorElement, parsingErrors);
     }
+
+    private OtherwiseNode ParseOtherwise(XElement otherwiseElement)
+    {
+        var chooses = new List<ChooseNode>();
+        var itemGroups = new List<ItemGroupNode>();
+        var propertyGroups = new List<PropertyGroupNode>();
+        var parsingErrors = new List<ParsingErrorNode>();
+        
+        foreach (var element in otherwiseElement.Elements())
+        {
+            switch (element.Name.LocalName)
+            {
+                case TagNames.Choose:
+                    var choose = TryParseChoose(element);
+                    switch (choose)
+                    {
+                        case ChooseNode cn:
+                            chooses.Add(cn);
+                            break;
+                        case ParsingErrorNode pen:
+                            parsingErrors.Add(pen);
+                            break;
+                        default:
+                            throw new ArgumentException("TryParseChoose should never return any other type");
+                    }
+                    break;
+                case TagNames.ItemGroup:
+                    var itemGroup = ParseItemGroup(element);
+                    itemGroups.Add(itemGroup);
+                    break;
+                case TagNames.PropertyGroup:
+                    var propertyGroup = ParseProperyGroup(element);
+                    propertyGroups.Add(propertyGroup);
+                    break;
+                default:
+                    var parsingError = CreateParsingErrorNode(element,
+                        $"Unexpected tag '{element.Name.LocalName}' in 'Otherwise' tag.");
+                    parsingErrors.Add(parsingError);
+                    break;
+            }
+        }
+
+        return new OtherwiseNode(otherwiseElement, parsingErrors, chooses, itemGroups, propertyGroups);
+    }
     
     private OutputNode ParseOutput(XElement outputElement)
     {
@@ -121,6 +207,7 @@ internal class Parser
         var usingTasks = new List<UsingTaskNode>();
         ProjectExtensionsNode? projectExtensions = null;
         var sdks = new List<SdkNode>();
+        var chooses = new List<ChooseNode>();
 
         foreach (var element in projectElement.Elements())
         {
@@ -170,6 +257,20 @@ internal class Parser
                     var sdk = ParseSdk(element);
                     sdks.Add(sdk);
                     break;
+                case TagNames.Choose:
+                    var choose = TryParseChoose(element);
+                    switch (choose)
+                    {
+                        case ChooseNode cn:
+                            chooses.Add(cn);
+                            break;
+                        case ParsingErrorNode pen:
+                            parsingErrors.Add(pen);
+                            break;
+                        default:
+                            throw new ArgumentException("TryParseChoose should never return any other type");
+                    }
+                    break;    
                 default:
                     var parsingError = CreateParsingErrorNode(element, $"Unexpected tag {element.Name.LocalName
                     } in 'Project' tag.");
@@ -178,7 +279,7 @@ internal class Parser
             }
         }
 
-        return new ProjectNode(projectElement, parsingErrors, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups, usingTasks, projectExtensions, sdks);
+        return new ProjectNode(projectElement, parsingErrors, propertyGroups, itemGroups, targets, importGroups, imports, itemDefinitionGroups, usingTasks, projectExtensions, sdks, chooses);
     }
 
     private PropertyGroupNode ParseProperyGroup(XElement propertyGroupElement)
@@ -276,6 +377,50 @@ internal class Parser
             }
         }
         return new UsingTaskNode(usingTaskElement, [], parametersGroups, tasks);
+    }
+
+    private WhenNode ParseWhen(XElement whenElement)
+    {
+        var chooses = new List<ChooseNode>();
+        var itemGroups = new List<ItemGroupNode>();
+        var propertyGroups = new List<PropertyGroupNode>();
+        var parsingErrors = new List<ParsingErrorNode>();
+        
+        foreach (var element in whenElement.Elements())
+        {
+            switch (element.Name.LocalName)
+            {
+                case TagNames.Choose:
+                    var choose = TryParseChoose(element);
+                    switch (choose)
+                    {
+                        case ChooseNode cn:
+                            chooses.Add(cn);
+                            break;
+                        case ParsingErrorNode pen:
+                            parsingErrors.Add(pen);
+                            break;
+                        default:
+                            throw new ArgumentException("TryParseChoose should never return any other type");
+                    }
+                    break;
+                case TagNames.ItemGroup:
+                    var itemGroup = ParseItemGroup(element);
+                    itemGroups.Add(itemGroup);
+                    break;
+                case TagNames.PropertyGroup:
+                    var propertyGroup = ParseProperyGroup(element);
+                    propertyGroups.Add(propertyGroup);
+                    break;
+                default:
+                    var parsingError = CreateParsingErrorNode(element,
+                        $"Unexpected tag '{element.Name.LocalName}' in 'When' tag.");
+                    parsingErrors.Add(parsingError);
+                    break;
+            }
+        }
+
+        return new WhenNode(whenElement, parsingErrors, chooses, itemGroups, propertyGroups);
     }
 
     private List<ParsingErrorNode> AllChildrenToParsingErrors(XElement element, string tagName)

@@ -194,6 +194,16 @@ internal class SyntaxHighlighter : INodeVisitor
         ErrorsList.Sort((a, b) => a.StartPosition.CompareTo(b.StartPosition));
     }
 
+    public void VisitChooseNode(ChooseNode chooseNode)
+    {
+        HighlightNode(chooseNode);
+        HighlightList(chooseNode.Whens.Cast<Node>().ToList());
+        if (chooseNode.Otherwise != null)
+        {
+            HighlightSingle(chooseNode.Otherwise);
+        }
+    }
+
     public void VisitImportGroupNode(ImportGroupNode importGroupNode)
     {
         HighlightNode(importGroupNode);
@@ -231,6 +241,14 @@ internal class SyntaxHighlighter : INodeVisitor
     public void VisitOnErrorNode(OnErrorNode onErrorNode)
     {
         HighlightNode(onErrorNode);
+    }
+
+    public void VisitOtherwiseNode(OtherwiseNode otherwiseNode)
+    {
+        HighlightNode(otherwiseNode);
+        HighlightList(otherwiseNode.Chooses.Cast<Node>().ToList());
+        HighlightList(otherwiseNode.ItemGroups.Cast<Node>().ToList());
+        HighlightList(otherwiseNode.PropertyGroups.Cast<Node>().ToList());
     }
 
     public void VisitOutputNode(OutputNode outputNode)
@@ -275,6 +293,7 @@ internal class SyntaxHighlighter : INodeVisitor
             HighlightSingle(projectNode.ProjectExtensions);
         }
         HighlightList(projectNode.Sdks.Cast<Node>().ToList());
+        HighlightList(projectNode.Chooses.Cast<Node>().ToList());
     }
 
     public void VisitPropertyGroupNode(PropertyGroupNode propertyGroupNode)
@@ -318,5 +337,13 @@ internal class SyntaxHighlighter : INodeVisitor
         HighlightNode(usingTaskNode);
         HighlightList(usingTaskNode.Tasks.Cast<Node>().ToList());
         HighlightList(usingTaskNode.ParameterGroups.Cast<Node>().ToList());
+    }
+
+    public void VisitWhenNode(WhenNode whenNode)
+    {
+        HighlightNode(whenNode);
+        HighlightList(whenNode.Chooses.Cast<Node>().ToList());
+        HighlightList(whenNode.ItemGroups.Cast<Node>().ToList());
+        HighlightList(whenNode.PropertyGroups.Cast<Node>().ToList());
     }
 }

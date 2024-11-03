@@ -12,8 +12,9 @@ internal class ProjectNode : Node
     public List<UsingTaskNode> UsingTasks { get; }
     public ProjectExtensionsNode? ProjectExtensions { get; }
     public List<SdkNode> Sdks { get; }
+    public List<ChooseNode> Chooses { get; }
     
-    public ProjectNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors, List<PropertyGroupNode> propertyGroups, List<ItemGroupNode> itemGroups, List<TargetNode> targets, List<ImportGroupNode> importGroups, List<ImportNode> imports, List<ItemDefinitionGroupNode> itemDefinitionGroups, List<UsingTaskNode> usingTasks, ProjectExtensionsNode? projectExtensions, List<SdkNode> sdks) : base(sourceXml, parsingErrors)
+    public ProjectNode(XElement sourceXml, List<ParsingErrorNode> parsingErrors, List<PropertyGroupNode> propertyGroups, List<ItemGroupNode> itemGroups, List<TargetNode> targets, List<ImportGroupNode> importGroups, List<ImportNode> imports, List<ItemDefinitionGroupNode> itemDefinitionGroups, List<UsingTaskNode> usingTasks, ProjectExtensionsNode? projectExtensions, List<SdkNode> sdks, List<ChooseNode> chooses) : base(sourceXml, parsingErrors)
     {
         PropertyGroups = propertyGroups;
         ItemGroups = itemGroups;
@@ -24,6 +25,7 @@ internal class ProjectNode : Node
         UsingTasks = usingTasks;
         ProjectExtensions = projectExtensions;
         Sdks = sdks;
+        Chooses = chooses;
     }
 
     public override void AcceptVisitor(INodeVisitor visitor)
